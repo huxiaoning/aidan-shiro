@@ -10,17 +10,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * 测试认证
+ * 测试授权
  *
  * @author aidan
  */
-public class AuthenticationTest {
+public class AuthorizationTest {
 
     private SimpleAccountRealm realm = new SimpleAccountRealm();
 
     @Before
     public void addUser() {
-        realm.addAccount("aidan", "123456");
+        realm.addAccount("aidan", "123456", "admin", "user");
     }
 
     @Test
@@ -41,8 +41,14 @@ public class AuthenticationTest {
         // true
         System.out.println("认证了吗?" + authenticated);
 
+
+        // org.apache.shiro.authz.UnauthorizedException
+        subject.checkRole("admin");
+        subject.checkRoles("admin", "user");
+
         // 登出
         subject.logout();
+
         authenticated = subject.isAuthenticated();
         // false
         System.out.println("认证了吗?" + authenticated);
