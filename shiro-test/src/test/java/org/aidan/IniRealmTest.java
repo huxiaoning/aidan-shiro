@@ -46,6 +46,7 @@ public class IniRealmTest {
         subject.checkRoles("admin", "user");
         // org.apache.shiro.authz.UnauthorizedException
         subject.checkPermission("user:delete");
+        subject.checkPermission("user/update");
         subject.checkPermissions("user:delete", "user:select");
 
         // 登出
