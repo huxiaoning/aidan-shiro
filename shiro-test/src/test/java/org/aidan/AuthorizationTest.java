@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * 测试授权
+ * 02 测试授权
  *
  * @author aidan
  */
