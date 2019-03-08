@@ -22,8 +22,28 @@ public class JdbcRealmTest {
     public void addUser() {
 
         DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setUrl(""); // TODO
+        dataSource.setUrl("jdbc:mysql://47.98.171.62:3306/shiro_test?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8");
+        dataSource.setUsername("root");
+        dataSource.setPassword("P2ssw0rd");
 
+        realm.setDataSource(dataSource);
+
+
+        realm.setAuthenticationQuery("select password from tt_user where name = ?");
+
+        realm.setUserRolesQuery("SELECT " +
+                "a.name " +
+                "FROM " +
+                "tt_role a " +
+                "LEFT JOIN tt_user_role b ON a.id = b.role_id " +
+                "LEFT JOIN tt_user c ON b.user_id = c.id " +
+                "WHERE " +
+                "c. NAME = ?");
+        realm.setPermissionsQuery("SELECT a.name from tt_permission a " +
+                "LEFT JOIN tt_role_permission b ON a.id = b.permission_id " +
+                "left join tt_role c ON b.role_id = c.id " +
+                "WHERE c.name = ?");
+        realm.setPermissionsLookupEnabled(true);
     }
 
     @Test
@@ -31,7 +51,6 @@ public class JdbcRealmTest {
         // 1 构建SecurityManager环境
         DefaultSecurityManager securityManager = new DefaultSecurityManager();
         securityManager.setRealm(realm);
-
         // 2 主体提交认证请求
         SecurityUtils.setSecurityManager(securityManager);
         Subject subject = SecurityUtils.getSubject();
@@ -50,7 +69,6 @@ public class JdbcRealmTest {
         subject.checkRoles("admin", "user");
         // org.apache.shiro.authz.UnauthorizedException
         subject.checkPermission("user:delete");
-        subject.checkPermission("user/update");
         subject.checkPermissions("user:delete", "user:select");
 
         // 登出
