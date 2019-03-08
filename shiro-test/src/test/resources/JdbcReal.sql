@@ -47,5 +47,16 @@ alter table tt_permission comment '权限';
 
 
 
--- 数据 TODO
+-- 数据
+insert into tt_user (id,name) values (1,'aidan');
 
+insert into tt_role (id,name) values (1,'admin'),(2,'user');
+
+insert into tt_permission (id,name) values (1,'user:delete'),(2,'user:select');
+
+insert into tt_user_role (id,user_id,role_id) values (1,1,1);
+insert into tt_user_role (id,user_id,role_id) values (1,1,2);
+
+insert into tt_user_permission (id,user_id,role_id) values (1,1,1);
+insert into tt_user_permission (id,user_id,role_id) values (1,1,2);
+insert into tt_user_permission (id,user_id,role_id) values (2,1,2);
