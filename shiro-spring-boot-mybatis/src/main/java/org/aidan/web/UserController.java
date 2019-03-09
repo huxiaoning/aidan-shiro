@@ -22,7 +22,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/add1")
+    @PostMapping("/add")
     public OptResult add(@RequestBody User user) {
         OptResult optResult = new OptResult();
         String salt = user.getSalt();
