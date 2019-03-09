@@ -1,7 +1,9 @@
 package org.aidan.service;
 
-import org.aidan.entity.Permission;
 import com.baomidou.mybatisplus.service.IService;
+import org.aidan.entity.Permission;
+
+import java.util.Set;
 
 /**
  * <p>
@@ -13,4 +15,11 @@ import com.baomidou.mybatisplus.service.IService;
  */
 public interface PermissionService extends IService<Permission> {
 
+    /**
+     * 获取用户的权限集合
+     *
+     * @param userId
+     * @return
+     */
+    Set<String> getPermissionsByUserId(Long userId);
 }

@@ -1,7 +1,9 @@
 package org.aidan.service;
 
-import org.aidan.entity.Role;
 import com.baomidou.mybatisplus.service.IService;
+import org.aidan.entity.Role;
+
+import java.util.Set;
 
 /**
  * <p>
@@ -13,4 +15,11 @@ import com.baomidou.mybatisplus.service.IService;
  */
 public interface RoleService extends IService<Role> {
 
+    /**
+     * 获取用户的角色集合
+     *
+     * @param userId
+     * @return
+     */
+    Set<String> getRoleSetByUserId(Long userId);
 }

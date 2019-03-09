@@ -7,5 +7,13 @@
         <id column="id" property="id"/>
         <result column="name" property="name"/>
     </resultMap>
+    <select id="getPermissionsByUserId" resultType="java.lang.String">
+        select a.name from t_permission a
+        left join t_role_permission b on a.id = b.permission_id
+        left join t_role c on b.role_id = c.id
+        left join t_user_role d on c.id = d.role_id
+        left join t_user e on d.user_id = e.id
+        where d.id = #{userId}
+    </select>
 
 </mapper>

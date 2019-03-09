@@ -1,10 +1,12 @@
 package org.aidan.service.impl;
 
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.aidan.entity.Role;
 import org.aidan.mapper.RoleDao;
 import org.aidan.service.RoleService;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 /**
  * <p>
@@ -17,4 +19,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleDao, Role> implements RoleService {
 
+    @Override
+    public Set<String> getRoleSetByUserId(Long userId) {
+        return baseMapper.getRoleSetByUserId(userId);
+    }
 }

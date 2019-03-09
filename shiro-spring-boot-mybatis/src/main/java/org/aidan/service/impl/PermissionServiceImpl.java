@@ -1,10 +1,12 @@
 package org.aidan.service.impl;
 
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.aidan.entity.Permission;
 import org.aidan.mapper.PermissionDao;
 import org.aidan.service.PermissionService;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 /**
  * <p>
@@ -17,4 +19,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission> implements PermissionService {
 
+    @Override
+    public Set<String> getPermissionsByUserId(Long userId) {
+        return baseMapper.getPermissionsByUserId(userId);
+    }
 }
