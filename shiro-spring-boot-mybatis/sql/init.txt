@@ -1,0 +1,64 @@
+drop table if exists t_user;
+create table t_user
+(
+   id                   bigint not null comment 'ID',
+   name                 varchar(100) comment '用户名称',
+   password             varchar(100) comment '密码',
+   salt                 varchar(100) comment '盐',
+   primary key (id)
+);
+alter table t_user comment '用户';
+
+drop table if exists t_user_role;
+create table t_user_role
+(
+   id                   bigint not null comment 'ID',
+   user_id              bigint comment '用户ID',
+   role_id              bigint comment '角色ID',
+   primary key (id)
+);
+alter table t_user_role comment '用户-角色';
+
+drop table if exists t_role;
+create table t_role
+(
+   id                   bigint not null comment 'ID',
+   name                 varchar(100) comment '角色名称',
+   primary key (id)
+);
+alter table t_role comment '角色';
+
+drop table if exists t_role_permission;
+create table t_role_permission
+(
+   id                   bigint not null comment 'ID',
+   role_id              bigint comment '角色ID',
+   permission_id        bigint comment '权限ID'
+);
+alter table t_role_permission comment '角色-权限';
+
+drop table if exists t_permission;
+create table t_permission
+(
+   id                   bigint not null comment 'ID',
+   name                 varchar(100) comment '权限名称',
+   primary key (id)
+);
+alter table t_permission comment '权限';
+
+
+
+
+-- 数据
+insert into t_user (id,name,password,salt) values (1,'aidan','123456','aidan');
+
+insert into t_role (id,name) values (1,'admin'),(2,'user');
+
+insert into t_permission (id,name) values (1,'user:delete'),(2,'user:select');
+
+insert into t_user_role (id,user_id,role_id) values (1,1,1);
+insert into t_user_role (id,user_id,role_id) values (2,1,2);
+
+insert into t_role_permission (id,role_id,permission_id) values (1,1,1);
+insert into t_role_permission (id,role_id,permission_id) values (2,1,2);
+insert into t_role_permission (id,role_id,permission_id) values (3,2,2);
