@@ -9,10 +9,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 自定义realm
@@ -25,13 +22,12 @@ public class CustomerRealm extends AuthorizingRealm {
         put("aidan", "123456");
     }};
 
-    Map<String, List<String>> roleMap = new HashMap<String, List<String>>(16) {{
-        put("aidan", Arrays.asList("admin", "user"));
+    Map<String, Set<String>> roleMap = new HashMap<String, Set<String>>(16) {{
+        put("aidan", new HashSet<>(Arrays.asList("admin", "user")));
     }};
 
-    Map<String, List<String>> permissionMap = new HashMap<String, List<String>>(16) {{
-        put("admin", Arrays.asList("user:select", "user:delete"));
-        put("user", Arrays.asList("user:select"));
+    Map<String, Set<String>> permissionMap = new HashMap<String, Set<String>>(16) {{
+        put("aidan", new HashSet<>(Arrays.asList("user:select", "user:delete")));
     }};
 
     public CustomerRealm() {
@@ -48,19 +44,21 @@ public class CustomerRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String userName = (String) principals.getPrimaryPrincipal();
+
+
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        List<String> roleList = roleMap.get(userName);
-        for (String role : roleList) {
-            info.addRole(role);
-            List<String> permissionList = permissionMap.get(role);
-            for (String permission : permissionList) {
-                info.addStringPermission(permission);
-            }
-        }
+
+        /** 模拟从数据库中查询角色与权限和集合 */
+        Set<String> roleSet = getRolesByUserName(userName);
+        Set<String> permissionSet = getPermissionsByUserName(userName);
+
+        info.addRoles(roleSet);
+        info.addStringPermissions(permissionSet);
 
 
         return info;
     }
+
 
     /**
      * 认证
@@ -92,4 +90,25 @@ public class CustomerRealm extends AuthorizingRealm {
     private String getPasswordByUserName(String userName) {
         return userMap.get(userName);
     }
+
+    /**
+     * 模拟从数据库查询角色集合
+     *
+     * @param userName
+     * @return
+     */
+    private Set<String> getRolesByUserName(String userName) {
+        return roleMap.get(userName);
+    }
+
+    /**
+     * 模拟从数据库查询权限集合
+     *
+     * @param userName
+     * @return
+     */
+    private Set<String> getPermissionsByUserName(String userName) {
+        return permissionMap.get(userName);
+    }
+
 }
