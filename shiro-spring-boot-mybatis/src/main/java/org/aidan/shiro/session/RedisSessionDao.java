@@ -42,13 +42,15 @@ public class RedisSessionDao extends AbstractSessionDAO {
     protected Serializable doCreate(Session session) {
 
         Serializable sessionId = generateSessionId(session);
+        assignSessionId(session, sessionId);
         saveSession(session);
         return sessionId;
     }
 
     @Override
     protected Session doReadSession(Serializable sessionId) {
-        if (sessionId != null) {
+        System.out.println("read session from redis");
+        if (sessionId == null) {
             return null;
         }
         byte[] key = getKey(sessionId.toString());

@@ -22,7 +22,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     public User getUserByUserName(String userName) {
         User u = new User();
         u.setName(userName);
-        EntityWrapper<User> ew = new EntityWrapper<>();
+        EntityWrapper<User> ew = new EntityWrapper<>(u);
         return selectOne(ew);
     }
 }

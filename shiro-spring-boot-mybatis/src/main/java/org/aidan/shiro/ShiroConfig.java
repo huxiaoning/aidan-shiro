@@ -3,10 +3,12 @@ package org.aidan.shiro;
 import org.aidan.shiro.filter.ResourceCheckFilter;
 import org.aidan.shiro.realm.UserRealm;
 import org.aidan.shiro.resolver.UrlPermissionResolver;
+import org.aidan.shiro.session.RedisSessionDao;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -49,7 +51,7 @@ public class ShiroConfig {
     public DefaultWebSecurityManager securityManager() {
         DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();
         defaultWebSecurityManager.setRealm(userRealm());
-
+        defaultWebSecurityManager.setSessionManager(sessionManager());
         return defaultWebSecurityManager;
     }
 
@@ -106,5 +108,20 @@ public class ShiroConfig {
         FilterRegistrationBean registration = new FilterRegistrationBean(filter);
         registration.setEnabled(false);
         return registration;
+    }
+
+
+    @Bean
+    public DefaultWebSessionManager sessionManager() {
+
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setSessionDAO(redisSessionDao());
+        return sessionManager;
+    }
+
+    @Bean
+    public RedisSessionDao redisSessionDao() {
+        RedisSessionDao redisSessionDao = new RedisSessionDao();
+        return redisSessionDao;
     }
 }

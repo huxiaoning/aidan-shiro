@@ -5,6 +5,7 @@ import org.apache.shiro.web.filter.AccessControlFilter;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 资源检查过滤器
@@ -18,6 +19,10 @@ public class ResourceCheckFilter extends AccessControlFilter {
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         Subject subject = getSubject(request, response);
         String url = getPathWithinApplication(request);
+        HttpServletRequest req = (HttpServletRequest) request;
+        String method = req.getMethod();
+        String requestURI = req.getRequestURI();
+        StringBuffer requestURL = req.getRequestURL();
         boolean permitted = subject.isPermitted(url);
         return permitted;
     }
