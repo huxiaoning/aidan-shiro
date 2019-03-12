@@ -3,10 +3,11 @@ package org.aidan.web;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.aidan.entity.User;
 import org.aidan.service.UserService;
+import org.aidan.shiro.enums.LoginType;
+import org.aidan.shiro.token.CustomizedToken;
 import org.aidan.vo.LoginVo;
 import org.aidan.vo.OptResult;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class LoginController {
 
         Subject subject = SecurityUtils.getSubject();
 
-        UsernamePasswordToken token = new UsernamePasswordToken(loginVo.getAccount(), loginVo.getPassword());
+        CustomizedToken token = new CustomizedToken(loginVo.getAccount(), loginVo.getPassword(), LoginType.ADMIN.toString());
         subject.login(token);
 
         boolean authenticated = subject.isAuthenticated();

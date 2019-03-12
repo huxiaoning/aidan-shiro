@@ -1,10 +1,14 @@
 package org.aidan.shiro;
 
+import org.aidan.shiro.authenticator.CustomizedModularRealmAuthenticator;
 import org.aidan.shiro.filter.ResourceCheckFilter;
+import org.aidan.shiro.realm.AdminRealm;
 import org.aidan.shiro.realm.UserRealm;
 import org.aidan.shiro.resolver.UrlPermissionResolver;
 import org.aidan.shiro.session.RedisSessionDao;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
+import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -16,7 +20,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
 import javax.servlet.Filter;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,7 +56,12 @@ public class ShiroConfig {
     @Bean
     public DefaultWebSecurityManager securityManager() {
         DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();
-        defaultWebSecurityManager.setRealm(userRealm());
+        defaultWebSecurityManager.setAuthenticator(customizedModularRealmAuthenticator());
+        List<Realm> realmList = new ArrayList<>();
+        realmList.add(userRealm());
+        realmList.add(adminRealm());
+        defaultWebSecurityManager.setRealms(realmList);
+
         defaultWebSecurityManager.setSessionManager(sessionManager());
         return defaultWebSecurityManager;
     }
@@ -123,5 +134,29 @@ public class ShiroConfig {
     public RedisSessionDao redisSessionDao() {
         RedisSessionDao redisSessionDao = new RedisSessionDao();
         return redisSessionDao;
+    }
+
+
+    /**
+     * 多realm配置
+     */
+    @Bean
+    public CustomizedModularRealmAuthenticator customizedModularRealmAuthenticator() {
+        CustomizedModularRealmAuthenticator customizedModularRealmAuthenticator = new CustomizedModularRealmAuthenticator();
+        customizedModularRealmAuthenticator.setAuthenticationStrategy(atLeastOneSuccessfulStrategy());
+        return customizedModularRealmAuthenticator;
+    }
+
+    @Bean
+    public AtLeastOneSuccessfulStrategy atLeastOneSuccessfulStrategy() {
+        AtLeastOneSuccessfulStrategy atLeastOneSuccessfulStrategy = new AtLeastOneSuccessfulStrategy();
+        return atLeastOneSuccessfulStrategy;
+    }
+
+    @Bean
+    public AdminRealm adminRealm() {
+        AdminRealm adminRealm = new AdminRealm();
+        adminRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+        return adminRealm;
     }
 }

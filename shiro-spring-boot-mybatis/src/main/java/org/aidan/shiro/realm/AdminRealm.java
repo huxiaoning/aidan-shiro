@@ -19,7 +19,7 @@ import java.util.Set;
  *
  * @author aidan
  */
-public class UserRealm extends AuthorizingRealm {
+public class AdminRealm extends AuthorizingRealm {
 
     @Autowired
     private UserService userService;
@@ -70,6 +70,6 @@ public class UserRealm extends AuthorizingRealm {
 
     @Override
     public String getName() {
-        return "UserRealm";
+        return "AdminRealm";
     }
 }
