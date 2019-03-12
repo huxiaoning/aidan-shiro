@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 登录控制器
@@ -38,6 +40,7 @@ public class LoginController {
         Subject subject = SecurityUtils.getSubject();
 
         CustomizedToken token = new CustomizedToken(loginVo.getAccount(), loginVo.getPassword(), LoginType.ADMIN.toString());
+        token.setRememberMe(true);
         subject.login(token);
 
         boolean authenticated = subject.isAuthenticated();
@@ -53,7 +56,7 @@ public class LoginController {
 
         Session session = subject.getSession();
         System.out.println(session.getId());
-
+        System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         return optResult.success();
     }
 

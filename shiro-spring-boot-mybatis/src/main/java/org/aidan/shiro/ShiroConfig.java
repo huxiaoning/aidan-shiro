@@ -12,7 +12,9 @@ import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -66,6 +68,8 @@ public class ShiroConfig {
         defaultWebSecurityManager.setSessionManager(sessionManager());
 
         defaultWebSecurityManager.setCacheManager(redisCacheManager());
+
+        defaultWebSecurityManager.setRememberMeManager(cookieRememberMeManager());
         return defaultWebSecurityManager;
     }
 
@@ -174,5 +178,25 @@ public class ShiroConfig {
     public RedisCacheManager redisCacheManager() {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         return redisCacheManager;
+    }
+
+    /**
+     * 记住我功能
+     */
+
+    @Bean
+    public CookieRememberMeManager cookieRememberMeManager() {
+        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+        cookieRememberMeManager.setCookie(simpleCookie());
+        return cookieRememberMeManager;
+    }
+
+    @Bean
+    public SimpleCookie simpleCookie() {
+        SimpleCookie simpleCookie = new SimpleCookie();
+        simpleCookie.setName("rememberMe");
+        // -1 浏览器关闭之后失效,相当于没有记住我
+        simpleCookie.setMaxAge(-1);
+        return simpleCookie;
     }
 }
