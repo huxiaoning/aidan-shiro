@@ -1,6 +1,7 @@
 package org.aidan.shiro;
 
 import org.aidan.shiro.authenticator.CustomizedModularRealmAuthenticator;
+import org.aidan.shiro.cache.RedisCacheManager;
 import org.aidan.shiro.filter.ResourceCheckFilter;
 import org.aidan.shiro.realm.AdminRealm;
 import org.aidan.shiro.realm.UserRealm;
@@ -63,6 +64,8 @@ public class ShiroConfig {
         defaultWebSecurityManager.setRealms(realmList);
 
         defaultWebSecurityManager.setSessionManager(sessionManager());
+
+        defaultWebSecurityManager.setCacheManager(redisCacheManager());
         return defaultWebSecurityManager;
     }
 
@@ -121,7 +124,9 @@ public class ShiroConfig {
         return registration;
     }
 
-
+    /**
+     * 会话管理
+     */
     @Bean
     public DefaultWebSessionManager sessionManager() {
 
@@ -158,5 +163,16 @@ public class ShiroConfig {
         AdminRealm adminRealm = new AdminRealm();
         adminRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         return adminRealm;
+    }
+
+
+    /**
+     * 缓存管理
+     */
+
+    @Bean
+    public RedisCacheManager redisCacheManager() {
+        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        return redisCacheManager;
     }
 }

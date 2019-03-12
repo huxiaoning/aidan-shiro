@@ -21,6 +21,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
 
     @Override
     public Set<String> getPermissionsByUserId(Long userId) {
+        System.out.println("从数据库获取权限信息");
         return baseMapper.getPermissionsByUserId(userId);
     }
 }

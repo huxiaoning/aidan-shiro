@@ -20,6 +20,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
 
     @Override
     public User getUserByUserName(String userName) {
+        System.out.println("从数据库获取用户");
         User u = new User();
         u.setName(userName);
         EntityWrapper<User> ew = new EntityWrapper<>(u);

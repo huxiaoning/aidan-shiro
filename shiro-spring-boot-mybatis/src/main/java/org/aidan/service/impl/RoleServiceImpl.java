@@ -21,6 +21,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, Role> implements RoleS
 
     @Override
     public Set<String> getRoleSetByUserId(Long userId) {
+        System.out.println("从数据库获取角色信息");
         return baseMapper.getRoleSetByUserId(userId);
     }
 }
