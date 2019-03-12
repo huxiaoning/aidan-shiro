@@ -7,12 +7,16 @@ import org.aidan.vo.LoginVo;
 import org.aidan.vo.OptResult;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 登录控制器
@@ -27,10 +31,11 @@ public class LoginController {
     private UserService userService;
 
     @PostMapping("/login")
-    public OptResult login(@RequestBody LoginVo loginVo) {
+    public OptResult login(@RequestBody LoginVo loginVo, HttpServletRequest request, HttpServletResponse response) {
         OptResult optResult = new OptResult();
 
         Subject subject = SecurityUtils.getSubject();
+
         UsernamePasswordToken token = new UsernamePasswordToken(loginVo.getAccount(), loginVo.getPassword());
         subject.login(token);
 
@@ -43,6 +48,13 @@ public class LoginController {
         EntityWrapper<User> ew = new EntityWrapper<>(u);
         User user = userService.selectOne(ew);
         optResult.setData(user);
+
+
+        Session session = subject.getSession();
+        System.out.println(session.getId());
+
         return optResult.success();
     }
+
+
 }
