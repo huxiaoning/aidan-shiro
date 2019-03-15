@@ -3,7 +3,6 @@ package org.aidan.shiro.resolver;
 import org.aidan.shiro.permission.UrlPermission;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.PermissionResolver;
-import org.apache.shiro.authz.permission.WildcardPermission;
 
 /**
  * url权限解析器
@@ -14,10 +13,10 @@ public class UrlPermissionResolver implements PermissionResolver {
 
     @Override
     public Permission resolvePermission(String permissionString) {
-        if (permissionString.startsWith("/")) {
-            return new UrlPermission(permissionString);
-        }
-        return new WildcardPermission(permissionString);
+//        if (permissionString.startsWith("/")) {
+        return new UrlPermission(permissionString);
+//    }
+//        return new WildcardPermission(permissionString);
     }
 
 }

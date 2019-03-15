@@ -21,9 +21,7 @@ public class ResourceCheckFilter extends AccessControlFilter {
         String url = getPathWithinApplication(request);
         HttpServletRequest req = (HttpServletRequest) request;
         String method = req.getMethod();
-        String requestURI = req.getRequestURI();
-        StringBuffer requestURL = req.getRequestURL();
-        boolean permitted = subject.isPermitted(url);
+        boolean permitted = subject.isPermitted(method + ":" + url);
         return permitted;
     }
 

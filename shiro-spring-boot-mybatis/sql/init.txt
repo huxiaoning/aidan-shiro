@@ -54,7 +54,7 @@ insert into t_user (id,name,password,salt) values (1,'aidan','78610e1aa1823de6a0
 
 insert into t_role (id,name) values (1,'admin'),(2,'user');
 
-insert into t_permission (id,name) values (1,'/user/add'),(2,'/user/get');
+insert into t_permission (id,name) values (1,'POST:/user/add'),(2,'POST:/user/get');
 
 insert into t_user_role (id,user_id,role_id) values (1,1,1);
 insert into t_user_role (id,user_id,role_id) values (2,1,2);
